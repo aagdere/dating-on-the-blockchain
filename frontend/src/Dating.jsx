@@ -1,55 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
+import Matching from './Matching';
+import CreateProfile from './CreateProfile';
+import Address from './Address';
 
 const loggedIn = false
 
-const fetchMyAddress = async () => {
-  return "myaddress"
-}
-
-const fetchProfile = async (address) => {
-  return {
-    name: "Aris",
-    linkToPicture: "https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg"
+const fetchProfile = async (defined, address) => {
+  if (defined) {
+    return {
+      name: "Aris",
+      linkToPicture: "https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg"
+    }
+  } else {
+    return undefined
   }
 }
 
 function Dating() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [profile, setProfile] = useState(undefined)
   const [myAddress, setMyAddress] = useState(undefined)
 
-  const maybeImage = (profile) => {
-    if (profile && profile.linkToPicture) {
-      return <Box
-        component="img"
-        sx={{
-          height: 233,
-          width: 350,
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 350, md: 250 },
-        }}
-        alt="Match Candidate"
-        src={profile.linkToPicture}
-        // src="https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg"
-      />
+  const addressCallback = (address) => {
+    console.log("Got address! " + address)
+    setMyAddress(address)
+  }
+
+  const profileCreatedCallback = (profile) => {
+    console.log("Got profile!")
+    console.log(profile)
+    setProfile(profile)
+  }
+
+  const selectScreen = (myAddress, profile) => {
+    if (myAddress && profile){
+      return <Matching profile={profile} address={myAddress}/>
+    } else if (myAddress) {
+      return <CreateProfile address={myAddress} profileCreatedCallback={profileCreatedCallback}/>
     } else {
-      return <br/>
+      return <Address connectedCallback={addressCallback}/>
     }
   }
 
   useEffect(() => {
-    const fetchAndSetMyAddress = async () => {
-      const myAddress = await fetchMyAddress();
-      setMyAddress(myAddress)
-    }
-
-    fetchAndSetMyAddress()
-  }, []);
-
-  useEffect(() => {
     const fetchAndSetProfile = async () => {
-      const myProfile = await fetchProfile();
+      const myProfile = await fetchProfile(true, myAddress);
       setProfile(myProfile)
     }
 
@@ -60,9 +54,7 @@ function Dating() {
 
   return (
     <div className="App">
-      Dating
-      <br/>
-      {maybeImage(profile)}
+      {selectScreen(myAddress, profile)}
     </div>
   );
 }
