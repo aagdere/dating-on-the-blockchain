@@ -1,0 +1,17 @@
+{
+  "name": "decentra-dating",
+  "version": "1.0.0",
+  "description": "Decentralized Dating",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.4.0",
+    "rimraf": "^3.0.2",
+    "truffle": "^5.3.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "truffle compile --config truffle-config.js",
+    "deploy": "truffle migrate --network boba_rinkeby --config truffle-config"
+  },
+  "author": "",
+  "license": "ISC"
+}
