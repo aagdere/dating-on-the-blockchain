@@ -39,10 +39,12 @@ const [firstName, favColor] = await client.put(state?.userId, [
 
 https://nft.storage
 
+```
 Satellite Address
 12EayRS2V1kEsWESU9QMRseFhdxYxKicsiFmxrsLZHeLUtdps3S@us1.storj.io:7777
 API Key
 1ZRWNwD1tpGFQZrN93FisUXoeNf3sn1amx5r6jnNUHqzAiGPPTkGyJcpfNn83rBrnvcDFkWFj4Vc6AhMyZxHfzBf9oMtjwf3zMpDQNdsYVdYHhYYJ3zPgHTJbtx1EgQ8QcBu5w1a1Wycv6eBY2mqCjcgP78MR
+```
 
 https://nft.storage/docs/client/js/
 
@@ -55,8 +57,8 @@ Token {
   url: 'ipfs://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq/metadata.json'
 }
 ```
-
-https://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq.ipfs.nftstorage.link/
+https://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq.ipfs.nftstorage.link/metadata.json
+https://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq.ipfs.nftstorage.link/image/ape.jpeg
 
 ## storj
 
