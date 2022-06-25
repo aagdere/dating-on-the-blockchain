@@ -46,8 +46,17 @@ API Key
 
 https://nft.storage/docs/client/js/
 
+Full example: https://nft.storage/docs/client/js/
 
+```
+node example.mjs ~/Downloads/ape.jpeg 'ape' 'a stolen ape'
+Token {
+  ipnft: 'bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq',
+  url: 'ipfs://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq/metadata.json'
+}
+```
 
+https://bafyreih3ch72eiyhjqe2ilgn2i4zbydfjcgytels2d7twwjssyce7dojeq.ipfs.nftstorage.link/
 
 ## storj
 
@@ -65,4 +74,7 @@ uplink share --url sj://cakes/ape.jpeg
 
 `storj` has an example from https://www.storj.io/ipfs
 
+`node example.js ~/Downloads/ape.jpeg`
+
 https://demo.storj-ipfs.com/ipfs/QmZYV89ivYv5uYyXHDjWmNAzzM7U45dCRcLCRDUoA7bHue
+
