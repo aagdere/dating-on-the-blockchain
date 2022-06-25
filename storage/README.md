@@ -63,4 +63,6 @@ uplink share --url sj://cakes/ape.jpeg
 
 ```
 
-`storj` has the uplink-js lib with bindings from https://github.com/storj-thirdparty/uplink-js
+`storj` has an example from https://www.storj.io/ipfs
+
+https://demo.storj-ipfs.com/ipfs/QmZYV89ivYv5uYyXHDjWmNAzzM7U45dCRcLCRDUoA7bHue
