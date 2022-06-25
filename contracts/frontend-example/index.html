@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentra Dating</title>
+</head>
+<body>
+    <h1>** Decentralized Dating **</h1>
+    <br/>
+
+    <h2></h2>
+    <div class="createProfile">
+        NOTE: One MetaMask account can only create one profile.
+        Name: <input id="name" type="text" />
+        Storage Link: <input id="storageLink" type="storageLink" />
+        <button type="button" id="create-profile-submit">Create Profile (If Not Exists Already)</button>
+    </div>
+    <div class="likeUser">
+        User Address: <input id="user-address" type="text" />
+        <button type="button" id="like-user-submit">Like User</button>
+    </div>
+
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/web3/dist/web3.min.js"></script>
+    <script type = "text/javascript" src="src/utils.js"></script>
+    <script type="text/javascript" src ="src/index.js"></script>
+</body>
+</html>
