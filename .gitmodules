@@ -1,0 +1,3 @@
+[submodule "storage/storj"]
+	path = storage/storj
+	url = git@github.com:storj-thirdparty/uplink-js.git

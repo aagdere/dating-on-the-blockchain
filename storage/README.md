@@ -44,10 +44,23 @@ Satellite Address
 API Key
 1ZRWNwD1tpGFQZrN93FisUXoeNf3sn1amx5r6jnNUHqzAiGPPTkGyJcpfNn83rBrnvcDFkWFj4Vc6AhMyZxHfzBf9oMtjwf3zMpDQNdsYVdYHhYYJ3zPgHTJbtx1EgQ8QcBu5w1a1Wycv6eBY2mqCjcgP78MR
 
+https://nft.storage/docs/client/js/
+
+
+
+
+## storj
+
+https://docs.storj.io/dcs/getting-started/quickstart-uplink-cli/
+
+```
 uplink setup
 uplink mb sj://cakes
 uplink cp ~/Downloads/ape.jpeg sj://cakes
 uplink ls sj://cakes
-## storj
+uplink cp sj://cakes/ape.jpeg ~/Downloads/cheesecake.jpg
+uplink share --url sj://cakes/ape.jpeg
 
-https://docs.storj.io/dcs/getting-started/quickstart-uplink-cli/
+```
+
+`storj` has the uplink-js lib with bindings from https://github.com/storj-thirdparty/uplink-js
