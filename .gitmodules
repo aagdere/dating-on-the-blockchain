@@ -1,0 +1,3 @@
+[submodule "storage/privy"]
+	path = storage/privy
+	url = git@github.com:privy-io/privy-quickstart.git
