@@ -14,11 +14,11 @@
         NOTE: One MetaMask account can only create one profile.
         Name: <input id="name" type="text" />
         Storage Link: <input id="storageLink" type="storageLink" />
-        <button type="button" id="create-profile-submit">Create Profile (If Not Exists Already)</button>
+        <button type="button" id="create-profile-submit" onclick="createProfileSubmit()">Create Profile (If Not Exists Already)</button>
     </div>
     <div class="likeUser">
         User Address: <input id="user-address" type="text" />
-        <button type="button" id="like-user-submit">Like User</button>
+        <button type="button" id="like-user-submit" onclick="likeSubmit()">Like User</button>
     </div>
 
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

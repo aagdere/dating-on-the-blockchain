@@ -1,39 +1,33 @@
+let contract;
+let account;
 async function startup() {
     const web3 = await getWeb3();
     const accounts = await web3.eth.getAccounts();
-    const contract = await getContract(web3);
+    contract = await getContract(web3);
     console.log(contract)
     console.log(accounts);
+    account = accounts[0];
     const users = await getUsersDirectly(contract);
     const numberOfUsers = await getUsersLength(contract);
     console.log(users);
     console.log(numberOfUsers);
-    createProfileListener(contract, accounts[0]);
-    createLikeListener(contract, accounts[0]);
+    const userExists = await userProfileExists(contract);
+    console.log(`User Profile Exists: ${userExists}`);
 }
 
-const createProfileListener = (contract, account) => {
-    let name;
-    let storageLink;
-    $("#name").on("change", (e) => {
-        name = e.target.value;;
-    })
-    $("#storageLink").on("change", (e) => {
-        storageLink = e.target.value;;
-    })
-    $("create-profile-submit").click(async () => {
-        await createProfile(contract, name, storageLink, account);
-    })
+const createProfileSubmit = async() => {
+    const name = $("#name").val();
+    const storageLink = $("#storageLink").val();
+    await createProfile(contract, name, storageLink, account);
 }
 
-const createLikeListener = (contract, account) => {
-    let likeAddress;
-    $("#user-address").on("change", (e) => {
-        likeAddress = e.target.value;
-    });
-    $("like-user-submit").click(async () => {
-        await likeUser(contract, likeAddress, account);
-    })
+const likeSubmit = async() => {
+    const likeAddress = $("#user-address").val();
+    const liked = await likeUser(contract, likeAddress, account);
+    console.log(liked);
+    const matched = await isMatch(contract, likeAddress);
+    console.log(`Matched: ${matched}`);
+    if (matched) alert(`We got a match!`);
 }
 
 /**
@@ -60,8 +54,12 @@ const likeUser = (contract, likedUserAddress, account) => {
     return contract.methods.like(likedUserAddress).send({ from: account })
 }
 
-const getCurrentUserInfo = async (contract, account) => {
-    const person = 
+const userProfileExists = (contract) => {
+    return contract.methods.exists().call();
+}
+
+const isMatch = async (contract, likedUserAddress) => {
+    return contract.methods.matched(likedUserAddress).call({ from: account });
 }
 
 startup();

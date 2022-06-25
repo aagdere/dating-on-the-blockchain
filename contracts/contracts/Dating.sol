@@ -7,19 +7,36 @@ contract Dating {
     struct Person {
         string decentralizedFileStorageLink;
         string name;
+        address personAddress;
+    }
+    struct ArrayOfPeople {
+        Person[] persons;
+        uint personsLength;
     }
     mapping(address => Person) public people;
-    mapping(address => address[]) public matchingMap;
+    // Unfortuantely in solidity you can't look through an array. So you need to know the length 
+    // of everytone you've liked so you can loop through all their information
+    mapping(address => ArrayOfPeople) public likeMap;
+    // Unfortuantely in solidity you can't look through an array. So you need to know the length 
+    // of everytone you've liked so you can loop through all their information
+    mapping(address => ArrayOfPeople) public unlikeMap;
     Person[] public users;
 
     constructor() {
         owner = msg.sender;
         // Initial owners of the contract to make this easier
-        Person storage ownerPerson = people[msg.sender];
-        ownerPerson.decentralizedFileStorageLink = "ipfs.com";
-        ownerPerson.name = "Alice";
-        users.push(ownerPerson);
-        numberOfUsers = numberOfUsers + 1;
+        // Some default users
+        Person memory alice = Person("ipfs://", "Alice", address(1));
+        Person memory bob = Person("ipfs://", "Bob", address(2));
+        Person memory charlie = Person("ipfs://", "Charlie", address(3));
+        users.push(alice);
+        users.push(bob);
+        users.push(charlie);
+        people[address(1)] = alice;
+        people[address(2)] = bob;
+        people[address(3)] = charlie;
+
+        numberOfUsers = 3;
     }
     function createProfile(string memory name, string memory decentralizedFileStorageLink) public returns (bool _exists) {
         // @TODO: Add validation that the person does not already exist.
@@ -28,6 +45,7 @@ contract Dating {
         if (tempEmptyStringTest.length == 0) {
             person.decentralizedFileStorageLink = decentralizedFileStorageLink;
             person.name = name;
+            person.personAddress = msg.sender;
             users.push(person);
             numberOfUsers = numberOfUsers + 1;
             _exists = false;
@@ -36,9 +54,49 @@ contract Dating {
         }
     }
     function like(address personLiked) public {
-        matchingMap[personLiked].push(msg.sender);
+        Person storage existingPerson = people[personLiked];
+        require(existingPerson.personAddress != address(0), "Person Liked Does Not Exist");
+        // Does not exist
+        ArrayOfPeople storage arrayOfPeople = likeMap[msg.sender];
+        arrayOfPeople.persons.push(existingPerson);
+        arrayOfPeople.personsLength = arrayOfPeople.personsLength + 1;
+
+    }
+    function unlike(address personUnliked) public returns (bool _exists) {
+        Person storage existingPerson = people[personUnliked];
+        // Does not exist
+        if (existingPerson.personAddress == address(0)) {
+            _exists = false;
+        } else {
+            ArrayOfPeople storage arrayOfPeople = unlikeMap[msg.sender];
+            arrayOfPeople.persons.push(existingPerson);
+            arrayOfPeople.personsLength = arrayOfPeople.personsLength + 1;
+            _exists = true;
+        }
     }
     function getUsers() public view returns (Person[] memory _users) {
         _users = users;
+    }
+    function exists() public view returns (bool _exists) {
+        Person storage person = people[msg.sender];
+        bytes memory tempEmptyStringTest = bytes(person.name); // Uses memory
+        if (tempEmptyStringTest.length == 0) {
+            _exists = false;
+        } else {
+            _exists = true;
+        }
+    }
+    // Keeping this generic so its easy to test matches
+    function matched(address personLiked) public view returns (bool _matched) {
+       _matched = false;
+       ArrayOfPeople storage likedPerson = likeMap[personLiked];
+        if (likedPerson.personsLength > 0) {
+            for (uint i=0; i<likedPerson.personsLength; i++) {
+                if (likedPerson.persons[i].personAddress == msg.sender) {
+                    _matched = true;
+                    break;
+                }
+            }
+        }
     }
 }

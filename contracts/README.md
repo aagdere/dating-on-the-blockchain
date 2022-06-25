@@ -3,27 +3,27 @@
 ## Compiling and Deploying
 `npm run compile`
 `npm run deploy`
+Then copy the build file to `frontend-example/contracts/Dating.json`
 
 ## Deployed Contract Address
 ```
-
-    Replacing 'Dating'
+  Replacing 'Dating'
    ------------------
-   > transaction hash:    0x2a7eff1ef027b316ba747a0b7131bd1809c6dce1a8fff148347830cf50c7c00f
+   > transaction hash:    0x5652d9994aaa1291052fb81119fbe0de11e88367756a0194beae58ff4c99556b
    > Blocks: 0            Seconds: 0
-   > contract address:    0xf9513eA48a3f1D918397C105FcE8D65F048ABbe8
-   > block number:        128290
-   > block timestamp:     1656166479
+   > contract address:    0xe6b9e7879E5D77AafFC56b0D37515539258a3E78
+   > block number:        128318
+   > block timestamp:     1656177737
    > account:             0xf336ef14952Ad86D7f7b4C628648bA4eDC844bBe
-   > balance:             0.08366856
-   > gas used:            2964141 (0x2d3aad)
+   > balance:             0.068986151
+   > gas used:            4803326 (0x494afe)
    > gas price:           1 gwei
    > value sent:          0 ETH
-   > total cost:          0.002964141 ETH
+   > total cost:          0.004803326 ETH
 
    > Saving artifacts
    -------------------------------------
-   > Total cost:         0.002964141 ETH
+   > Total cost:         0.004803326 ETH
 ```
 
 ## Private Keys
