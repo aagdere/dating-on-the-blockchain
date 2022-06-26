@@ -123,12 +123,12 @@ contract Dating {
         }
     }
     // Keeping this generic so its easy to test matches
-    function matched(address personLiked) public view returns (bool _matched) {
+    function matched(address personLiked, address otherPerson) public view returns (bool _matched) {
        _matched = false;
        ArrayOfPeople storage likedPerson = likeMap[personLiked];
         if (likedPerson.personsLength > 0) {
             for (uint i=0; i<likedPerson.personsLength; i++) {
-                if (likedPerson.persons[i].personAddress == msg.sender) {
+                if (likedPerson.persons[i].personAddress == otherPerson) {
                     _matched = true;
                     break;
                 }

@@ -46,7 +46,7 @@ function Matching(props) {
 
         const doStuff = async () => {
           const userAddress = user[2]
-          const isMatch = await contract.methods.matched(userAddress).call()
+          const isMatch = await contract.methods.matched(userAddress, account).call()
           // const isMatch = true
           if (isMatch) {
             console.log(`Found a match!: ${JSON.stringify(user, null, 2)}`)
