@@ -198,7 +198,7 @@ function CreateProfile(props) {
 
   async function storeInStorj(binaryData, githubId) {
     let data = new FormData();
-    data.append('file', new Blob([binaryData]), `${githubId}.jpeg`);
+    data.append('file', new Blob([binaryData]));
 
     return axios.post("https://demo.storj-ipfs.com/api/v0/add", data, {
       headers: {
