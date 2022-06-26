@@ -6,6 +6,9 @@ import { DatingContractJson } from './DatingContract';
 
 var Web3 = require('web3');
 
+const useNftStorage = true
+const NFT_STORAGE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDYyZThCZDBDZDQ1MTViMDI0NTA0YmM3MTc5MWFDMjQxN0U3OWExYzgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NjEyODYyMjA0MiwibmFtZSI6ImV0aG55In0.H8MeYoXeMbNz3TsUwV5GLA-dMGuippyLLEuNeE_Y5ow'
+
 function CreateProfile(props) {
   // const [selectedImage, setSelectedImage] = useState(undefined)
   const [githubUserTextField, setGithubUserTextField] = useState("")
@@ -26,7 +29,7 @@ function CreateProfile(props) {
         decentralizedFileStorageLink: decentralizedFileStorageLink
       })
     }
-  }, [decentralizedFileStorageLink, githubUsername])
+  }, [decentralizedFileStorageLink, githubUsername, profileCreated])
 
   const fetchGithubUserInfo = async (isMocked, username) => {
     const githubURL = `https://api.github.com/users/${username}`
@@ -92,7 +95,6 @@ function CreateProfile(props) {
 
   const profilePicture = () => {
     if (githubUserInfo) {
-      console.log(githubUserInfo.data)
       return <Box
         component="img"
         sx={{
@@ -153,31 +155,75 @@ function CreateProfile(props) {
 
   useEffect (() => {
     const createProfileIfNeeded = async () => {
-      if (decentralizedFileStorageLink && contract && account && !user) {
+      if (decentralizedFileStorageLink && contract && account && !profileCreated) {
         // const githubAvatarLink = githubUserInfo.data.avatar_url
         const name = githubUserInfo.data.name
         await contract.methods.createProfile(name, decentralizedFileStorageLink).send({from: account})
+        setProfileCreated(true)
       }
     }
 
-    
-  }, [decentralizedFileStorageLink, contract, account, user])
+    createProfileIfNeeded()
+  }, [decentralizedFileStorageLink, contract, account, user, profileCreated])
+
+  async function getImageData(imgUrl) {
+      return axios
+          .get(imgUrl, {
+              responseType: 'arraybuffer'
+          });
+  }
+
+  async function storeInNftstorage(binaryData) {
+      return axios.post("https://api.nft.storage/upload", binaryData, {
+          headers: {
+              'Authorization': `Bearer ${NFT_STORAGE_KEY}`,
+              'Content-Type': 'image/jpeg'
+          }
+      });
+  }
+
+  async function storeInStorj(binaryData) {
+      let data = new FormData();
+      data.append('file', binaryData);
+
+      return axios.post("https://demo.storj-ipfs.com/api/v0/add", data, {
+          headers: {
+              'Content-Type': `multipart/form-data; boundary= ${data._boundary}`,
+          }
+      });
+  }
 
   const onClickSubmit = async () => {
     const contract = await getContract(web3)
     const accounts = await web3.eth.getAccounts();
     const account = accounts[0];
     setContract(contract)
-    setAccount(account[0])
+    setAccount(account)
 
     const allUsers = await contract.methods.getUsers().call()
+    console.log("All Users")
+    console.log(allUsers)
     const me = allUsers.filter(user => user[2] == account)
     if (me.length > 0) {
       console.log("You've already created a user!")
       console.log(me[0])
-      setUser(me)
+      console.log(me[0].decentralizedFileStorageLink)
+      setUser(me[0])
+      setProfileCreated(true)
+      setDecentralizedFileStorageLink(me[0].decentralizedFileStorageLink)
     } else {
       // Post image to IPFS
+      // const binaryImgBuffer = await getImageData(githubUserInfo.data.avatar_url);
+      const binaryImgBuffer = await getImageData("https://avatars.githubusercontent.com/u/7295348?v=4");
+      if (useNftStorage) {
+        const nftstorage = await storeInNftstorage(binaryImgBuffer.data);
+        const httpNftStorageIpfsLink = `https://${nftstorage.data.value.cid}.ipfs.nftstorage.link/`;
+        setDecentralizedFileStorageLink(httpNftStorageIpfsLink)
+      } else {
+        const storj = await storeInStorj(binaryImgBuffer.data);
+        const httpStorjLink = `https://demo.storj-ipfs.com/ipfs/${storj.data['Hash']}`;
+        setDecentralizedFileStorageLink(httpStorjLink)
+      }
     }
   } 
 

@@ -2,21 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Matching from './Matching';
 import CreateProfile from './CreateProfile';
 import Address from './Address';
-
-const fetchProfile = async (useMocked, address) => {
-  if (useMocked) {
-    return {
-      name: "Aris",
-      linkToPicture: "https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg"
-    }
-  } else {
-    return undefined
-  }
-}
+import MatchFound from './MatchFound';
 
 function Dating() {
   const [profile, setProfile] = useState(undefined)
   const [myAddress, setMyAddress] = useState(undefined)
+  const [match, setMatch] = useState(undefined)
+  const [myUser, setMyUser] = useState(undefined)
 
   const addressCallback = (address) => {
     console.log("Got address! " + address)
@@ -29,26 +21,22 @@ function Dating() {
     setProfile(profile)
   }
 
+  const foundMatchCallback = (matchUser, me) => {
+    setMatch(matchUser)
+    setMyUser(me)
+  }
+
   const selectScreen = (myAddress, profile) => {
-    if (myAddress && profile){
-      return <Matching profile={profile} address={myAddress}/>
+    if (match && myUser) {
+      return <MatchFound match={match} me={myUser}/>
+    } else if (myAddress && profile){
+      return <Matching profile={profile} address={myAddress} foundMatchCallback={foundMatchCallback}/>
     } else if (myAddress) {
       return <CreateProfile address={myAddress} profileCreatedCallback={profileCreatedCallback}/>
     } else {
       return <Address connectedCallback={addressCallback}/>
     }
   }
-
-  useEffect(() => {
-    const fetchAndSetProfile = async () => {
-      const myProfile = await fetchProfile(false, myAddress);
-      setProfile(myProfile)
-    }
-
-    if (myAddress && !profile) {
-      fetchAndSetProfile()
-    }
-  }, [myAddress]);
 
   return (
     <div className="App">

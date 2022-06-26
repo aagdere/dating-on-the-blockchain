@@ -8,7 +8,7 @@
     "truffle": "^5.3.6"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "truffle test test/TestDating.sol",
     "compile": "truffle compile --config truffle-config.js",
     "deploy": "truffle migrate --network boba_rinkeby --config truffle-config"
   },

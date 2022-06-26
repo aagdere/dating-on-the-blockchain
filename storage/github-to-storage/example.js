@@ -69,10 +69,10 @@ async function main() {
     const githubId = args[0]
     // const githubPayload = await getGitHubPayload(githubId);
     // const avatarUrl = githubPayload.data['avatar_url'];
-    const avatarUrl = 'https://avatars.githubusercontent.com/u/11747245?v=4';
+    const avatarUrl = 'https://i.insider.com/5cb8b133b8342c1b45130629?width=700';
     const binaryImgBuffer = await getImageData(avatarUrl);
-    // const nftstorage = await storeInNftstorage(binaryImgBuffer.data);
-    // const httpNftStorageIpfsLink = `https://${nftstorage.data.value.cid}.ipfs.nftstorage.link/`;
+    const nftstorage = await storeInNftstorage(binaryImgBuffer.data);
+    const httpNftStorageIpfsLink = `https://${nftstorage.data.value.cid}.ipfs.nftstorage.link/`;
     // const storj = await storeInStorj(binaryImgBuffer.data);
     // const httpStorjLink = `https://demo.storj-ipfs.com/ipfs/${storj.data['Hash']}`;
     // const privyBlob = await storeInPrivy(githubId, {
@@ -80,6 +80,7 @@ async function main() {
     // });
 
     // console.log("privyBlob", privyBlob);
+    console.log(httpNftStorageIpfsLink)
 }
 
 main()

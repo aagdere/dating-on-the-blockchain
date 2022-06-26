@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Paper } from '@mui/material';
+import { DatingContractJson } from './DatingContract';
 
-const fetchMatchCandidates = async () => {
-  return {
-    people: [
-      {name: "John", linkToPicture: "https://i.insider.com/61f14a0ce996470011907119?width=600&format=jpeg&auto=webp"},
-      {name: "Gabe", linkToPicture: "https://www.masterclass.com/course-images/attachments/rBJAtj5pz7vfNYdcbNsjkHeE?width=400&height=400&fit=cover&dpr=2"},
-      {name: "Sam", linkToPicture: "https://i.insider.com/5cb8b133b8342c1b45130629?width=700"}
-    ]
-  }
-}
+var Web3 = require('web3');
 
 function Matching(props) {
   const [peopleIndex, setPeopleIndex] = useState(-1)
@@ -17,14 +10,50 @@ function Matching(props) {
   const [haveNotStarted, setHaveNotStarted] = useState(true)
   const [outOfPeople, setOutOfPeople] = useState(false)
 
+  const web3 = new Web3(window.ethereum);
+
   useEffect(() => {
 
     const fetchPeople = async () => {
-      const people = await fetchMatchCandidates()
-      setPeople(people.people)
+      const peopleFromContract = await fetchMatchCandidates()
+      const peopleToSave = []
+      peopleFromContract.map((person) => {
+        peopleToSave.push({
+          name: person[1],
+          linkToPicture: person[0],
+          address: person[2]
+        })
+      })
+      setPeople(peopleToSave)
     }
 
     fetchPeople()
+
+    const interval = setInterval(async () => {
+      const contract = await getContract(web3)
+      const accounts = await web3.eth.getAccounts();
+      const account = accounts[0];
+
+      const likedUsers = await contract.methods.getLikedUsers(account).call()
+      const allUsers = await contract.methods.getUsers().call()
+      console.log("Checking for matches...")
+      
+      likedUsers.forEach(user => {
+
+        const doStuff = async () => {
+          const userAddress = user[2]
+          const isMatch = await contract.methods.matched(userAddress).call()
+          // const isMatch = true
+          if (isMatch) {
+            console.log(`Found a match!: ${JSON.stringify(user, null, 2)}`)
+            props.foundMatchCallback(user, allUsers.filter(user => user[2] === account)[0])
+          }
+        }
+
+        doStuff()
+      })
+
+    }, 2000)
   }, [])
 
   useEffect(() => {
@@ -41,6 +70,32 @@ function Matching(props) {
       setOutOfPeople(false)
     }
   }, [peopleIndex])
+
+  const getContract = async (web3) => {
+    const data = DatingContractJson();
+
+    const netId = await web3.eth.net.getId();
+    const deployedNetwork = data.networks[netId];
+    const greeting = new web3.eth.Contract(
+      data.abi,
+      deployedNetwork && deployedNetwork.address
+    );
+    return greeting;
+  };
+
+  const fetchMatchCandidates = async () => {
+    const contract = await getContract(web3)
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+
+    const allUsers = await contract.methods.getUsers().call()
+    const likedUsers = await contract.methods.getLikedUsers(account).call()
+    const unlikedUsers = await contract.methods.getUnlikedUsers(account).call()
+    const excludeAddresses = (likedUsers.concat(unlikedUsers)).map(user => user[2]).concat([account])
+    const remainingMatchCandidates = allUsers.filter(user => !excludeAddresses.includes(user[2]))
+
+    return remainingMatchCandidates
+  }
 
   const maybeImage = () => {
     if (props.profile && props.profile.linkToPicture) {
@@ -79,30 +134,57 @@ function Matching(props) {
     }
   }
 
-  const like = async () => {
+  const like = async (person) => {
     // Call smart contract
+    const contract = await getContract(web3)
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+
+    console.log("account")
+    console.log(account)
+    console.log("liking")
+    console.log(person.address)
+
+    await contract.methods.like(person.address).send({ from: account })
+  }
+
+  const unlike = async (person) => {
+    // Call smart contract
+    const contract = await getContract(web3)
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+
+    console.log("account")
+    console.log(account)
+    console.log("unliking")
+    console.log(person.address)
+
+    await contract.methods.unlike(person.address).send({ from: account })
   }
 
   const onClickYes = async () => {
     // Check if match
-    await like(people)
-    //setPeopleIndex(peopleIndex + 1)
+    await like(people[peopleIndex])
+    setPeopleIndex(peopleIndex + 1)
   }
 
-  const onClickNo = () => {
+  const onClickNo = async () => {
+    await unlike(people[peopleIndex])
     setPeopleIndex(peopleIndex + 1)
   }
 
   return (
-    <div className="App">
-      <div className="App">
-        <Typography variant="h3"> Find some matches! </Typography>
-        <Typography variant="h6"> Account: {props.address} </Typography>
-        <br/>
-        {maybeMatchCandidate(people, peopleIndex)}
-        <Button disabled={outOfPeople} onClick={onClickYes}>Yes</Button>
-        <Button disabled={outOfPeople} onClick={onClickNo}>No</Button>
-      </div>
+    <div className="App"
+      style={{
+        backgroundColor: 'blue'
+      }}
+    >
+      <Typography variant="h3"> Find some matches! </Typography>
+      <Typography variant="h6"> Account: {props.address} </Typography>
+      <br/>
+      {maybeMatchCandidate(people, peopleIndex)}
+      <Button disabled={outOfPeople} onClick={onClickYes}>Yes</Button>
+      <Button disabled={outOfPeople} onClick={onClickNo}>No</Button>
     </div>
   );
 }

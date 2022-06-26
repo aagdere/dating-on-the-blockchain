@@ -26,9 +26,9 @@ contract Dating {
         owner = msg.sender;
         // Initial owners of the contract to make this easier
         // Some default users
-        Person memory alice = Person("ipfs://", "Alice", address(1));
-        Person memory bob = Person("ipfs://", "Bob", address(2));
-        Person memory charlie = Person("ipfs://", "Charlie", address(3));
+        Person memory alice = Person("https://bafybeigz566yrm5mdwozrvilhhi7ofbwu2jjs5dpba7cvcdhtr4wcrdx7i.ipfs.nftstorage.link/", "Alice", address(1));
+        Person memory bob = Person("https://bafkreig7bo4vy45j4v4yged73rp2wzpc66ywcskhb6xwxk6rcs6zi2fyyu.ipfs.nftstorage.link/", "Bob", address(2));
+        Person memory charlie = Person("https://bafkreiaashzqcdvykhoqzd6wb4vpdjv7bvjna4x4kercrp2xk46rwfqwsy.ipfs.nftstorage.link/", "Charlie", address(3));
         users.push(alice);
         users.push(bob);
         users.push(charlie);
@@ -38,6 +38,29 @@ contract Dating {
 
         numberOfUsers = 3;
     }
+
+    function reset() public {
+        for (uint i=0; i<numberOfUsers; i++) {
+            delete people[users[i].personAddress];
+            delete likeMap[users[i].personAddress];
+            delete unlikeMap[users[i].personAddress];
+        }
+
+        delete users;
+
+        Person memory alice = Person("https://bafybeigz566yrm5mdwozrvilhhi7ofbwu2jjs5dpba7cvcdhtr4wcrdx7i.ipfs.nftstorage.link/", "Alice", address(1));
+        Person memory bob = Person("https://bafkreig7bo4vy45j4v4yged73rp2wzpc66ywcskhb6xwxk6rcs6zi2fyyu.ipfs.nftstorage.link/", "Bob", address(2));
+        Person memory charlie = Person("https://bafkreiaashzqcdvykhoqzd6wb4vpdjv7bvjna4x4kercrp2xk46rwfqwsy.ipfs.nftstorage.link/", "Charlie", address(3));
+        users.push(alice);
+        users.push(bob);
+        users.push(charlie);
+        people[address(1)] = alice;
+        people[address(2)] = bob;
+        people[address(3)] = charlie;
+
+        numberOfUsers = 3;
+    }
+
     function createProfile(string memory name, string memory decentralizedFileStorageLink) public returns (bool _exists) {
         // @TODO: Add validation that the person does not already exist.
         Person storage person = people[msg.sender];
@@ -77,6 +100,19 @@ contract Dating {
     function getUsers() public view returns (Person[] memory _users) {
         _users = users;
     }
+
+    function getLikedUsers(address person) public view returns (Person[] memory _liked) {
+        _liked = likeMap[person].persons;
+    }
+
+    function getUnlikedUsers(address person) public view returns (Person[] memory _unliked) {
+        _unliked = unlikeMap[person].persons;
+    }
+
+    // function getAllLiked() public view returns (Person[][] memory _liked) {
+    //     _liked = 
+    // }
+
     function exists() public view returns (bool _exists) {
         Person storage person = people[msg.sender];
         bytes memory tempEmptyStringTest = bytes(person.name); // Uses memory
