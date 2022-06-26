@@ -174,11 +174,7 @@ function Matching(props) {
   }
 
   return (
-    <div className="App"
-      style={{
-        backgroundColor: 'blue'
-      }}
-    >
+    <div className="App" >
       <Typography variant="h3"> Find some matches! </Typography>
       <Typography variant="h6"> Account: {props.address} </Typography>
       <br/>

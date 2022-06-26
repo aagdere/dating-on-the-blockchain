@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import Dating from './Dating';
-import { styled } from '@mui/material';
+import { styled, Container, Box, Grid } from '@mui/material';
 import { lightBlue } from '@mui/material/colors';
 
 
 
 function App() {
 
-  const StyledDating = styled(Dating)({
-    backgroundColor: "lightblue"
-  })
-
   return (
     <div className="App">
-      <StyledDating/>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        style={{ minHeight: '100vh' }}
+      >
+
+        <Grid item xs={3}>
+         <Dating />
+        </Grid>   
+         
+      </Grid> 
     </div>
   );
 }

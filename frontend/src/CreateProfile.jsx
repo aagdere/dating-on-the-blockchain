@@ -47,7 +47,7 @@ function CreateProfile(props) {
 
   const onClickGetUser = async () => {
     setGithubUsername(githubUserTextField)
-    const userInfo = await fetchGithubUserInfo(true, githubUserTextField)
+    const userInfo = await fetchGithubUserInfo(false, githubUserTextField)
     setGithubUserInfo(userInfo)
     //onFileUpload()
   }
