@@ -1,6 +1,36 @@
 [submodule "storage/storj"]
 	path = storage/storj
 	url = git@github.com:storj-thirdparty/uplink-js.git
+[submodule "storage/privy"]
+	path = storage/privy
+	url = git@github.com:privy-io/privy-quickstart.git
 [submodule "world-id"]
 	path = world-id
 	url = git@github.com:worldcoin/world-id-starter-hardhat.git
+[submodule "lib/ds-test"]
+	path = lib/ds-test
+	url = https://github.com/dapphub/ds-test
+[submodule "lib/solmate"]
+	path = lib/solmate
+	url = https://github.com/rari-capital/solmate
+[submodule "lib/forge-std"]
+	path = lib/forge-std
+	url = https://github.com/brockelmore/forge-std
+[submodule "lib/clones-with-immutable-args"]
+	path = lib/clones-with-immutable-args
+	url = https://github.com/ZeframLou/clones-with-immutable-args
+[submodule "lib/nxtp"]
+	path = lib/nxtp
+	url = https://github.com/connext/nxtp
+[submodule "lib/nfthashi"]
+	path = lib/nfthashi
+	url = https://github.com/nfthashi/monorepo
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "lib/zk-kit"]
+	path = lib/zk-kit
+	url = git@github.com:privacy-scaling-explorations/zk-kit.git
+[submodule "world-id-starter"]
+	path = world-id-starter
+	url = git@github.com:worldcoin/world-id-starter.git
