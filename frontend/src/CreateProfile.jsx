@@ -11,7 +11,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Divider from '@mui/material/Divider';
 var Web3 = require('web3');
 
-const useNftStorage = true
+const useNftStorage = false
 const NFT_STORAGE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDYyZThCZDBDZDQ1MTViMDI0NTA0YmM3MTc5MWFDMjQxN0U3OWExYzgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NjEyODYyMjA0MiwibmFtZSI6ImV0aG55In0.H8MeYoXeMbNz3TsUwV5GLA-dMGuippyLLEuNeE_Y5ow'
 
 function CreateProfile(props) {
@@ -196,9 +196,9 @@ function CreateProfile(props) {
     });
   }
 
-  async function storeInStorj(binaryData) {
+  async function storeInStorj(binaryData, githubId) {
     let data = new FormData();
-    data.append('file', binaryData);
+    data.append('file', new Blob([binaryData]), `${githubId}.jpeg`);
 
     return axios.post("https://demo.storj-ipfs.com/api/v0/add", data, {
       headers: {
@@ -233,7 +233,7 @@ function CreateProfile(props) {
         const httpNftStorageIpfsLink = `https://${nftstorage.data.value.cid}.ipfs.nftstorage.link/`;
         setDecentralizedFileStorageLink(httpNftStorageIpfsLink)
       } else {
-        const storj = await storeInStorj(binaryImgBuffer.data);
+        const storj = await storeInStorj(binaryImgBuffer.data, githubUserInfo.data.avatar_url);
         const httpStorjLink = `https://demo.storj-ipfs.com/ipfs/${storj.data['Hash']}`;
         setDecentralizedFileStorageLink(httpStorjLink)
       }
