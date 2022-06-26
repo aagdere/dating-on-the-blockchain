@@ -1,3 +1,6 @@
 [submodule "storage/storj"]
 	path = storage/storj
 	url = git@github.com:storj-thirdparty/uplink-js.git
+[submodule "world-id"]
+	path = world-id
+	url = git@github.com:worldcoin/world-id-starter-hardhat.git
