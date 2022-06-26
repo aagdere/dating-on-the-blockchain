@@ -19,7 +19,10 @@ function Address(props) {
     setEthereum(ethereum)
     setIsMetaMaskInstalled(isInstalled)
 
-    ethereum.on('connect', (connectInfo) => connectToMetaMask(ethereum))
+    ethereum.on('connect', (connectInfo) => {
+      console.log("Connected")
+      connectToMetaMask(ethereum)
+    })
   }, []);
 
   useEffect(() => {

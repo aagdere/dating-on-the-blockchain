@@ -61,7 +61,7 @@ function Matching(props) {
   const maybeMatchCandidate = (people, peopleIndex) => {
     if (people.length > 0 && peopleIndex > -1 && peopleIndex < people.length) {
       return <div>
-        <Typography variant="h5">{people[peopleIndex.name]}</Typography>
+        <Typography variant="h5">{people[peopleIndex].name}</Typography>
         <Box
             component="img"
             sx={{

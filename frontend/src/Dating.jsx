@@ -3,10 +3,8 @@ import Matching from './Matching';
 import CreateProfile from './CreateProfile';
 import Address from './Address';
 
-const loggedIn = false
-
-const fetchProfile = async (defined, address) => {
-  if (defined) {
+const fetchProfile = async (useMocked, address) => {
+  if (useMocked) {
     return {
       name: "Aris",
       linkToPicture: "https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg"
@@ -43,7 +41,7 @@ function Dating() {
 
   useEffect(() => {
     const fetchAndSetProfile = async () => {
-      const myProfile = await fetchProfile(true, myAddress);
+      const myProfile = await fetchProfile(false, myAddress);
       setProfile(myProfile)
     }
 
