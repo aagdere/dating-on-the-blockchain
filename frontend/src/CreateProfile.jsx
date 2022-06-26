@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography, Box } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import getGithubExampleResponse from './ExampleGithubResponse.js';
 import axios from 'axios';
 import { DatingContractJson } from './DatingContract';
-
+import Card from '@mui/material/Card';
+import Box from '@mui/material/Box';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Divider from '@mui/material/Divider';
 var Web3 = require('web3');
 
 const useNftStorage = true
@@ -24,7 +29,7 @@ function CreateProfile(props) {
 
   useEffect(() => {
 
-    const loadContract = async () => {      
+    const loadContract = async () => {
       const contract = await getContract(web3)
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
@@ -46,7 +51,7 @@ function CreateProfile(props) {
 
   const fetchGithubUserInfo = async (isMocked, username) => {
     const githubURL = `https://api.github.com/users/${username}`
-    
+
     if (!isMocked) {
       return await axios({
         method: 'get',
@@ -67,17 +72,17 @@ function CreateProfile(props) {
 
   // // On file upload (click the upload button)
   // const onFileUpload = () => {
-  
+
   //   // Create an object of formData
   //   const formData = new FormData();
-  
+
   //   // Update the formData object
   //   formData.append(
   //     "myFile",
   //     selectedImage,
   //     selectedImage.githubUsername
   //   );
-  
+
   //   // Details of the uploaded file
   //   console.log(selectedImage);
 
@@ -102,23 +107,19 @@ function CreateProfile(props) {
     if (githubUserInfo) {
       return <Typography variant="h6"> {githubUserInfo.data.name} </Typography>
     } else {
-      return <div/>
+      return <div />
     }
   }
 
   const profilePicture = () => {
     if (githubUserInfo) {
-      return <Box
+      return <CardMedia
         component="img"
-        sx={{
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 350, md: 250 },
-        }}
-        alt="Match Candidate"
-        src={githubUserInfo.data.avatar_url}
+        height="500"
+        image={githubUserInfo.data.avatar_url}
       />
     } else {
-      return <div/>
+      return <div />
     }
   }
 
@@ -156,7 +157,7 @@ function CreateProfile(props) {
 
   const getContract = async (web3) => {
     const data = DatingContractJson();
-  
+
     const netId = await web3.eth.net.getId();
     const deployedNetwork = data.networks[netId];
     const greeting = new web3.eth.Contract(
@@ -166,12 +167,12 @@ function CreateProfile(props) {
     return greeting;
   };
 
-  useEffect (() => {
+  useEffect(() => {
     const createProfileIfNeeded = async () => {
       if (decentralizedFileStorageLink && contract && account && !profileCreated) {
         // const githubAvatarLink = githubUserInfo.data.avatar_url
         const name = githubUserInfo.data.name
-        await contract.methods.createProfile(name, decentralizedFileStorageLink).send({from: account})
+        await contract.methods.createProfile(name, decentralizedFileStorageLink).send({ from: account })
         setProfileCreated(true)
       }
     }
@@ -180,30 +181,30 @@ function CreateProfile(props) {
   }, [decentralizedFileStorageLink, contract, account, user, profileCreated])
 
   async function getImageData(imgUrl) {
-      return axios
-          .get(imgUrl, {
-              responseType: 'arraybuffer'
-          });
+    return axios
+      .get(imgUrl, {
+        responseType: 'arraybuffer'
+      });
   }
 
   async function storeInNftstorage(binaryData) {
-      return axios.post("https://api.nft.storage/upload", binaryData, {
-          headers: {
-              'Authorization': `Bearer ${NFT_STORAGE_KEY}`,
-              'Content-Type': 'image/jpeg'
-          }
-      });
+    return axios.post("https://api.nft.storage/upload", binaryData, {
+      headers: {
+        'Authorization': `Bearer ${NFT_STORAGE_KEY}`,
+        'Content-Type': 'image/jpeg'
+      }
+    });
   }
 
   async function storeInStorj(binaryData) {
-      let data = new FormData();
-      data.append('file', binaryData);
+    let data = new FormData();
+    data.append('file', binaryData);
 
-      return axios.post("https://demo.storj-ipfs.com/api/v0/add", data, {
-          headers: {
-              'Content-Type': `multipart/form-data; boundary= ${data._boundary}`,
-          }
-      });
+    return axios.post("https://demo.storj-ipfs.com/api/v0/add", data, {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary= ${data._boundary}`,
+      }
+    });
   }
 
   const onClickSubmit = async () => {
@@ -237,96 +238,41 @@ function CreateProfile(props) {
         setDecentralizedFileStorageLink(httpStorjLink)
       }
     }
-  } 
+  }
 
   const nukeEverything = async () => {
     if (contract) {
-      await contract.methods.reset().send({from: account})
+      await contract.methods.reset().send({ from: account })
     }
   }
 
   return (
     <div className="App">
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <Typography variant="h3"> Import your Profile! </Typography>
-      <Typography variant="h6"> Account: {props.address} </Typography>
-      <br/>
-      <TextField disabled={!(githubUserInfo == undefined)} placeholder="Github Username" value={githubUserTextField} onChange={onGithubUsernameChange}/>
-      <br/>
-      {profileName()}
-      {profilePicture()}
-      {userInfo()}
-      <br/>
-      <Button disabled={!(githubUserInfo == undefined)} onClick={onClickGetUser}>
-        Get User
-      </Button> 
-      <Button disabled={(githubUserInfo == undefined)} onClick={onClickSubmit}>
-        Save
-      </Button>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <Card sx={{ minWidth: 500 }}>
+        <CardContent>
+          <Typography variant="h3"> Create Your Profile! </Typography>
+          <Typography variant="h6">{props.address}</Typography>
+          <br />
+          <TextField disabled={!(githubUserInfo == undefined)} placeholder="GitHub Username" value={githubUserTextField} onChange={onGithubUsernameChange} />
+          {githubUserInfo && <Card>
+            <Divider></Divider>
+            {profilePicture()}
+            <CardContent>
+              {profileName()}
+              {userInfo()}
+            </CardContent>
+          </Card>}
+          <br />
+          <Button disabled={!(githubUserInfo == undefined)} onClick={onClickGetUser}>
+            Get User
+          </Button>
+          <Button disabled={(githubUserInfo == undefined)} onClick={onClickSubmit}>
+            Save
+          </Button>
+        </CardContent>
+
+      </Card>
+
       <Button onClick={nukeEverything}>
         Nuke Everything
       </Button>

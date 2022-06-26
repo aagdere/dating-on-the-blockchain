@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 
 const metaMaskImgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/800px-MetaMask_Fox.svg.png"
 
@@ -32,8 +35,8 @@ function Address(props) {
   }, [address]);
 
   const connectToMetaMask = async (ethereum) => {
-      setWaitingForMetaMask(true)
-      await requestAccounts(ethereum)    
+    setWaitingForMetaMask(true)
+    await requestAccounts(ethereum)
   }
 
   const connectToMetaMaskIfReady = async () => {
@@ -64,7 +67,7 @@ function Address(props) {
   const render = () => {
     if (!isMetaMaskInstalled) {
       return "Please install MetaMask!"
-    } else if (!isConnected){
+    } else if (!isConnected) {
       if (checkIfConnectedButton) {
         return <Button onClick={connectToMetaMaskIfReady}>Check if Connected</Button>
       }
@@ -76,19 +79,27 @@ function Address(props) {
 
   return (
     <div className="App">
-      <Box
-        component="img"
-        sx={{
-          height: 500,
-          width: 500,
-          maxHeight: { xs: 500, md: 250 },
-          maxWidth: { xs: 500, md: 250 },
-        }}
-        alt="MetaMask"
-        src={metaMaskImgUrl}
-      />
-      <br/>
-      {render()}
+      <Card variant="outlined">
+        <CardContent>
+
+        <Box
+          component="img"
+          sx={{
+            height: 500,
+            width: 500,
+            maxHeight: { xs: 500, md: 250 },
+            maxWidth: { xs: 500, md: 250 },
+          }}
+          alt="MetaMask"
+          src={metaMaskImgUrl}
+        />
+        </CardContent>
+        
+        <CardActions>
+          {render()}
+        </CardActions>
+      </Card>
+
     </div>
   );
 }

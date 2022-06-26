@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import { DatingContractJson } from './DatingContract';
-
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Divider from '@mui/material/Divider';
 var Web3 = require('web3');
 
 function Matching(props) {
@@ -97,35 +101,20 @@ function Matching(props) {
     return remainingMatchCandidates
   }
 
-  const maybeImage = () => {
-    if (props.profile && props.profile.linkToPicture) {
-      return <Box
-        component="img"
-        sx={{
-          maxHeight: { xs: 500, md: 250 },
-          maxWidth: { xs: 500, md: 250 },
-        }}
-        alt="Match Candidate"
-        src={props.profile.linkToPicture}
-      />
-    } else {
-      return <div/>
-    }
-  }
-
   const maybeMatchCandidate = (people, peopleIndex) => {
     if (people.length > 0 && peopleIndex > -1 && peopleIndex < people.length) {
       return <div>
+        <Card>
         <Typography variant="h5">{people[peopleIndex].name}</Typography>
-        <Box
-            component="img"
-            sx={{
-              maxHeight: { xs: 500, md: 250 },
-              maxWidth: { xs: 500, md: 250 },
-            }}
-            alt="Match Candidate"
-            src={people[peopleIndex].linkToPicture}
+        <CardContent>
+            <CardMedia
+          component="img"
+          height="500"
+          image={people[peopleIndex].linkToPicture}
         />
+        </CardContent>
+        </Card>
+        
         </div>
     } else if (people.length > 0 && peopleIndex > -1) {
       return <Typography variant="h4"> All out of people, come back later! </Typography>
@@ -176,7 +165,7 @@ function Matching(props) {
   return (
     <div className="App" >
       <Typography variant="h3"> Find some matches! </Typography>
-      <Typography variant="h6"> Account: {props.address} </Typography>
+      <Typography variant="h6">  {props.address} </Typography>
       <br/>
       {maybeMatchCandidate(people, peopleIndex)}
       <Button disabled={outOfPeople} onClick={onClickYes}>Yes</Button>

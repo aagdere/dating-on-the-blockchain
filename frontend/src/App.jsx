@@ -18,7 +18,7 @@ function App() {
         style={{ minHeight: '100vh' }}
       >
 
-        <Grid item xs={3}>
+        <Grid item>
          <Dating />
         </Grid>   
          
