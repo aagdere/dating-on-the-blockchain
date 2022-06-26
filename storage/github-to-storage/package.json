@@ -1,0 +1,11 @@
+{
+  "name": "github-to-storage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "nft.storage": "^6.3.0",
+    "@privy-io/privy-browser": "^0.0.1-beta.1"
+  }
+}
