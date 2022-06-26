@@ -23,6 +23,19 @@ function CreateProfile(props) {
   const web3 = new Web3(window.ethereum);
 
   useEffect(() => {
+
+    const loadContract = async () => {      
+      const contract = await getContract(web3)
+      const accounts = await web3.eth.getAccounts();
+      const account = accounts[0];
+      setContract(contract)
+      setAccount(account)
+    }
+
+    loadContract()
+  }, [])
+
+  useEffect(() => {
     if (githubUserInfo && decentralizedFileStorageLink && profileCreated) {
       props.profileCreatedCallback({
         githubUserInfo: githubUserInfo,
@@ -213,8 +226,7 @@ function CreateProfile(props) {
       setDecentralizedFileStorageLink(me[0].decentralizedFileStorageLink)
     } else {
       // Post image to IPFS
-      // const binaryImgBuffer = await getImageData(githubUserInfo.data.avatar_url);
-      const binaryImgBuffer = await getImageData("https://avatars.githubusercontent.com/u/7295348?v=4");
+      const binaryImgBuffer = await getImageData(githubUserInfo.data.avatar_url);
       if (useNftStorage) {
         const nftstorage = await storeInNftstorage(binaryImgBuffer.data);
         const httpNftStorageIpfsLink = `https://${nftstorage.data.value.cid}.ipfs.nftstorage.link/`;
@@ -227,9 +239,24 @@ function CreateProfile(props) {
     }
   } 
 
+  const nukeEverything = async () => {
+    if (contract) {
+      await contract.methods.reset().send({from: account})
+    }
+  }
+
   return (
     <div className="App">
-      <Typography variant="h3"> Create your Profile! </Typography>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <Typography variant="h3"> Import your Profile! </Typography>
       <Typography variant="h6"> Account: {props.address} </Typography>
       <br/>
       <TextField disabled={!(githubUserInfo == undefined)} placeholder="Github Username" value={githubUserTextField} onChange={onGithubUsernameChange}/>
@@ -243,6 +270,65 @@ function CreateProfile(props) {
       </Button> 
       <Button disabled={(githubUserInfo == undefined)} onClick={onClickSubmit}>
         Save
+      </Button>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <Button onClick={nukeEverything}>
+        Nuke Everything
       </Button>
     </div>
   );

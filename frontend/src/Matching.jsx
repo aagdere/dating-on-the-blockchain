@@ -128,7 +128,7 @@ function Matching(props) {
         />
         </div>
     } else if (people.length > 0 && peopleIndex > -1) {
-      return <Typography variant="h4"> All out of people, Sorry! </Typography>
+      return <Typography variant="h4"> All out of people, come back later! </Typography>
     } else {
       return <div/>
     }
